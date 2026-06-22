@@ -1,7 +1,7 @@
 // ============================================================
-// chirp — Twitter timeline clone
+// X — Timeline clone
 // Manual feature: Dark mode toggle (no AI assistance)
-// Cursor feature 1: Tweet compose modal
+// Cursor feature 1: Post compose modal
 // Cursor feature 2: Explore page w/ live search + category filter
 // ============================================================
 
@@ -63,15 +63,15 @@ const tweets = [
 ];
 
 const trends = [
-  { cat: "Technology · Trending", name: "#JavaScript", count: "84.2K chirps", tag: "tech" },
-  { cat: "Trending in South Africa", name: "#LoadShedding", count: "61.5K chirps", tag: "news" },
-  { cat: "Sport · Trending", name: "Bafana Bafana", count: "33.8K chirps", tag: "sport" },
-  { cat: "Music · Trending", name: "#Amapiano", count: "120K chirps", tag: "music" },
-  { cat: "Technology · Trending", name: "#Netlify", count: "9,302 chirps", tag: "tech" },
-  { cat: "Trending", name: "#CursorAI", count: "27.1K chirps", tag: "tech" },
-  { cat: "Sport", name: "#RugbyChampionship", count: "18.4K chirps", tag: "sport" },
-  { cat: "Music", name: "Black Coffee", count: "14.7K chirps", tag: "music" },
-  { cat: "Trending", name: "#LoomVideo", count: "2,108 chirps", tag: "news" }
+  { cat: "Technology · Trending", name: "#JavaScript", count: "84.2K posts", tag: "tech" },
+  { cat: "Trending in South Africa", name: "#LoadShedding", count: "61.5K posts", tag: "news" },
+  { cat: "Sport · Trending", name: "Bafana Bafana", count: "33.8K posts", tag: "sport" },
+  { cat: "Music · Trending", name: "#Amapiano", count: "120K posts", tag: "music" },
+  { cat: "Technology · Trending", name: "#Netlify", count: "9,302 posts", tag: "tech" },
+  { cat: "Trending", name: "#CursorAI", count: "27.1K posts", tag: "tech" },
+  { cat: "Sport", name: "#RugbyChampionship", count: "18.4K posts", tag: "sport" },
+  { cat: "Music", name: "Black Coffee", count: "14.7K posts", tag: "music" },
+  { cat: "Trending", name: "#LoomVideo", count: "2,108 posts", tag: "news" }
 ];
 
 const peopleToFollow = [
@@ -148,7 +148,7 @@ document.getElementById('feed').addEventListener('click', (e) => {
       retweetedSet.delete(id);
     } else {
       retweetedSet.add(id);
-      showToast("Chirped to your followers ✦");
+      showToast("Reposted to your followers ✦");
     }
     article.outerHTML = tweetTemplate(tweet);
   } else if(e.target.closest('.reply-btn')){
@@ -241,7 +241,7 @@ function postNewTweet(text){
   inlinePostBtn.disabled = true;
   closeComposeModal();
   document.getElementById('modalComposeText').value = '';
-  showToast("Your chirp was sent ✦");
+  showToast("Your post was sent ✦");
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
@@ -296,7 +296,7 @@ function renderTrends(filter = 'all', query = ''){
   });
   list.innerHTML = filtered.length
     ? filtered.map(trendItemTemplate).join('')
-    : `<div class="trend-item"><span class="trend-name">No chirps found</span><span class="trend-count">Try a different search or category.</span></div>`;
+    : `<div class="trend-item"><span class="trend-name">No posts found</span><span class="trend-count">Try a different search or category.</span></div>`;
 }
 
 function renderSidePanels(){
