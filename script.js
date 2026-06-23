@@ -1,9 +1,9 @@
-// X clone | base+Cursor(media+follow)+manual polls | all in <400 lines main, total<500
+// X clone | base + Cursor (media + following) + manual polls | script ~225 lines
 const tweets = [
-  {id:1,name:"Naledi Khumalo",handle:"@naledi_dev",time:"2h",text:"Just shipped dark mode on my side project at 1am. The toggle works. I do not. ☕",likes:142,retweets:18,replies:9,img:null},
-  {id:2,name:"Zaio",handle:"@zaio_io",time:"4h",text:"Reminder: ship the #project before you polish it forever. Done beats perfect.",likes:980,retweets:210,replies:44,img:null},
-  {id:3,name:"Thabo Mokoena",handle:"@thabo_builds",time:"5h",text:"Built my first #JavaScript modal from scratch today. Cursor helped a bit. I touched grass after.",likes:320,retweets:41,replies:22,img:"https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=60"},
-  {id:4,name:"Amahle Dlamini",handle:"@amahle.codes",time:"7h",text:"Responsive checklist: test on 4K, test on 2017 Android, fix flex, repeat.",likes:540,retweets:88,replies:31,img:null}
+  {id:1,name:"Genius Mathebula",handle:"@genius_mat",time:"2h",text:"Just shipped dark mode on my side project at 1am. The toggle works. I do not. ☕",likes:142,retweets:18,replies:9,img:null},
+  {id:2,name:"Tina Fezani",handle:"@tina_fezani",time:"4h",text:"Reminder: ship the #project before you polish it forever. Done beats perfect.",likes:980,retweets:210,replies:44,img:null},
+  {id:3,name:"Kamo Digwamaje",handle:"@kamo_dig",time:"5h",text:"Built my first #JavaScript modal from scratch today. Cursor helped a bit. I touched grass after.",likes:320,retweets:41,replies:22,img:"https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=60"},
+  {id:4,name:"Kazadi Mukendi",handle:"@kazadi_m",time:"7h",text:"Responsive checklist: test on 4K, test on 2017 Android, fix flex, repeat.",likes:540,retweets:88,replies:31,img:null}
 ];
 const trends = [
   {cat:"Technology · Trending",name:"#JavaScript",count:"84.2K posts",tag:"tech"},
@@ -14,12 +14,13 @@ const trends = [
 ];
 const peopleToFollow = [
   {name:"Cursor",handle:"@cursor_ai",img:"https://i.pravatar.cc/48?img=33"},
-  {name:"Zaio",handle:"@zaio_io",img:"https://i.pravatar.cc/48?img=5"},
+  {name:"Kago",handle:"@kago",img:"https://i.pravatar.cc/48?img=5"},
   {name:"Netlify",handle:"@netlify",img:"https://i.pravatar.cc/48?img=8"}
 ];
 let likedSet = new Set(), retweetedSet = new Set(), followed = new Set(), bookmarked = new Set(), userPollVotes = {};
-let currentUser = {name:"Samukelo Ricardo Ngozo",handle:"@samukelo",avatar:"https://i.pravatar.cc/48?img=28",bio:"Fullstack web developer | Learning at Zaio",location:"Johannesburg, South Africa",website:"samukelo.dev",joined:"March 2024"};
-const STORAGE_KEY = 'chirp_tweets_v1', LIKES_KEY='chirp_likes_v1', RTS_KEY='chirp_rts_v1', POLL_KEY='chirp_pollvotes_v1', FOL_KEY='chirp_followed_v1', BM_KEY='chirp_bookmarks_v1', USER_KEY='chirp_current_user_v1';
+let currentUser = {name:"Samukelo Ricardo Ngozo",handle:"@samukelo",avatar:"https://i.pravatar.cc/48?img=28",bio:"Fullstack web developer | Learning at Kago",location:"Johannesburg, South Africa",website:"samukelo.dev",joined:"March 2024"};
+
+const STORAGE_KEY = 'post_tweets_v2', LIKES_KEY='post_likes_v2', RTS_KEY='post_rts_v2', POLL_KEY='post_pollvotes_v2', FOL_KEY='post_followed_v2', BM_KEY='post_bookmarks_v2', USER_KEY='post_current_user_v2';
 
 function loadFromStorage() {
   try {
@@ -114,7 +115,7 @@ function renderBookmarks(){
   c.innerHTML = f.length ? f.map(tweetTemplate).join('') : '<div class="empty-note">No bookmarks yet. Tap bookmark on posts.</div>';
 }
 
-// Document delegation: fixes feed + bookmarks + explore results interactions
+// Document delegation for all tweet actions (feed + bookmarks)
 document.addEventListener('click', e => {
   const art = e.target.closest('.tweet'); if(!art) return;
   const raw = art.dataset.id; const tw = tweets.find(x => String(x.id) === String(raw)); if(!tw) return;
@@ -146,7 +147,6 @@ function setView(n){
   document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));
   let tgt = document.getElementById('view-'+n);
   if(!tgt){
-    // stub unsupported views (lists/messages/more) gracefully
     tgt = document.getElementById('view-home');
     const main = document.getElementById('mainContent');
     if(main && n!=='home'){ main.dataset.stub = n; }
@@ -233,7 +233,7 @@ document.querySelectorAll('.home-tab').forEach(tab=>{
 // Init
 function initApp(){
   loadFromStorage(); updateProfileUI(); renderFeed(); renderRightSidebar();
-  if(followed.size===0){ followed.add('@zaio_io'); followed.add('@naledi_dev'); renderRightSidebar(); }
+  if(followed.size===0){ followed.add('@kago'); followed.add('@genius_mat'); renderRightSidebar(); }
   const hv=document.getElementById('view-home'); if(hv) hv.classList.remove('hidden');
   setView('home');
 }
