@@ -1,11 +1,11 @@
-# FakeTwitter (Chirp) — Zaio Solo Twitter Project
+# FakeTwitter — Zaio Solo Twitter Project
 
 A vanilla HTML/CSS/JS Twitter/X timeline clone built for the Zaio Project Simulation assignment (100 marks).
 
 ## Features (current)
 - Fully working Home timeline feed with seed + user posts
 - Inline composer + modal compose (Post button)
-- Live post updates (new chirps appear at top)
+- Live post updates (new posts appear at top)
 - Like, Retweet, Reply, Share interactions (with counts + visual states)
 - Character counter (280) on both composers + warning state
 - Left sidebar nav with icons (Home / Explore / Notifications / Profile)
@@ -30,8 +30,15 @@ A vanilla HTML/CSS/JS Twitter/X timeline clone built for the Zaio Project Simula
 
 ## Project structure
 - `index.html` — markup + views
-- `script.js` — all logic (feed, post, interactions, persistence, views)
+- `script.js` — all logic (feed, post, interactions, persistence, views) - keep this readable version!
 - `style.css` — X-accurate dark theme + responsive
+
+## JavaScript Compression (for deploy)
+For Netlify or production, compress script.js:
+- Online: Paste into https://javascript-minifier.com/ and download minified version
+- Or `npx terser script.js -o script.min.js --compress --mangle`
+Then change `<script src="script.js">` to `script.min.js` in index.html
+Keep original script.js for your Loom video and assignment (they want to see your manual code clearly)
 
 ## Notes for Loom video
 - Base (40) is complete and polished

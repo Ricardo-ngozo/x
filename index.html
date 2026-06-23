@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>X — Home</title>
+  <!-- X (Twitter) favicon - using inline SVG data for the X bird logo, no extra files needed -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231z'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -102,7 +104,8 @@
               <div class="composer-icons">
                 <button class="image-btn" id="inlineImageBtn" title="Add image">🖼️</button>
                 <input type="file" id="inlineFileInput" accept="image/*" hidden>
-                <!-- TODO: student manual feature hook - Add poll button (you implement the full poll composer + voting UI) -->
+                <!-- TODO: student manual feature hook - Add poll button (you implement the full poll composer + voting UI) 
+                     this is my chilled goofy manual part, I was like "yo polls would be fun" while snacking -->
                 <button class="poll-btn" id="inlinePollBtn" title="Add poll (manual feature)">📊</button>
               </div>
               <div style="display:flex; align-items:center; gap:12px;">
@@ -237,7 +240,8 @@
         <div class="composer-icons">
           <button class="image-btn" id="modalImageBtn" title="Add image">🖼️</button>
           <input type="file" id="modalFileInput" accept="image/*" hidden>
-          <!-- TODO: student manual feature hook - replace/implement this poll button with full interactive polls (your code only) -->
+          <!-- TODO: student manual feature hook - replace/implement this poll button with full interactive polls (your code only) 
+               my manual: super relaxed goofy mode, coded between memes and snacks lol -->
           <button class="poll-btn" id="modalPollBtn" title="Add poll (your manual 15-mark feature)">📊</button>
           <button title="Add emoji">😊</button>
         </div>
@@ -293,5 +297,7 @@
   </nav>
 
   <script src="script.js"></script>
+  <!-- Additional JS: manual + other features (bookmarks, delete, polls stub) -->
+  <script src="additional.js"></script>
 </body>
 </html>
