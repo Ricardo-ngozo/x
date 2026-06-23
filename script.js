@@ -84,6 +84,19 @@ let likedSet = new Set();
 let retweetedSet = new Set();
 let userTweetCount = 0;
 
+let currentUser = {
+  name: "Samukelo Ricardo Ngozo",
+  handle: "@samukelo",
+  avatar: "https://i.pravatar.cc/48?img=28",
+  bio: "Fullstack web developer | Learning at Zaio",
+  location: "Johannesburg, South Africa",
+  website: "samukelo.dev",
+  joined: "March 2024"
+};
+
+let followed = new Set();
+let bookmarked = new Set();
+
 const STORAGE_KEY = 'chirp_tweets_v1';
 const LIKES_KEY = 'chirp_likes_v1';
 const RTS_KEY = 'chirp_rts_v1';
@@ -104,6 +117,17 @@ function loadFromStorage() {
     if (savedLikes) likedSet = new Set(JSON.parse(savedLikes));
     const savedRts = localStorage.getItem(RTS_KEY);
     if (savedRts) retweetedSet = new Set(JSON.parse(savedRts));
+
+    const savedFollowed = localStorage.getItem('chirp_followed_v1');
+    if (savedFollowed) followed = new Set(JSON.parse(savedFollowed));
+
+    const savedBookmarks = localStorage.getItem('chirp_bookmarks_v1');
+    if (savedBookmarks) bookmarked = new Set(JSON.parse(savedBookmarks));
+
+    const savedUser = localStorage.getItem('chirp_current_user_v1');
+    if (savedUser) {
+      currentUser = { ...currentUser, ...JSON.parse(savedUser) };
+    }
   } catch (e) { /* ignore bad storage */ }
 }
 
@@ -112,7 +136,80 @@ function saveToStorage() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(tweets));
     localStorage.setItem(LIKES_KEY, JSON.stringify(Array.from(likedSet)));
     localStorage.setItem(RTS_KEY, JSON.stringify(Array.from(retweetedSet)));
+    localStorage.setItem('chirp_followed_v1', JSON.stringify(Array.from(followed)));
+    localStorage.setItem('chirp_bookmarks_v1', JSON.stringify(Array.from(bookmarked)));
+    localStorage.setItem('chirp_current_user_v1', JSON.stringify(currentUser));
   } catch (e) {}
+}
+
+function updateProfileUI() {
+  // sidebar
+  const sidebarName = document.getElementById('sidebarName');
+  const sidebarHandle = document.getElementById('sidebarHandle');
+  const sidebarAvatar = document.getElementById('sidebarAvatar');
+  if (sidebarName) sidebarName.textContent = currentUser.name;
+  if (sidebarHandle) sidebarHandle.textContent = currentUser.handle;
+  if (sidebarAvatar) sidebarAvatar.src = currentUser.avatar;
+
+  // profile view
+  const profileName = document.getElementById('profileName');
+  const profileHandle = document.getElementById('profileHandle');
+  const profileBio = document.getElementById('profileBio');
+  const profileLocation = document.getElementById('profileLocation');
+  const profileWebsite = document.getElementById('profileWebsite');
+  const profileJoinDate = document.getElementById('profileJoinDate');
+  const profileAvatar = document.getElementById('profileAvatar');
+  if (profileName) profileName.textContent = currentUser.name;
+  if (profileHandle) profileHandle.textContent = currentUser.handle;
+  if (profileBio) profileBio.textContent = currentUser.bio;
+  if (profileLocation) profileLocation.textContent = currentUser.location;
+  if (profileWebsite) {
+    profileWebsite.textContent = currentUser.website;
+    profileWebsite.href = currentUser.website.startsWith('http') ? currentUser.website : `https://${currentUser.website}`;
+  }
+  if (profileJoinDate) profileJoinDate.textContent = currentUser.joined;
+  if (profileAvatar) profileAvatar.src = currentUser.avatar.replace('/48?', '/120?');
+}
+
+// ---------- EDIT PROFILE ----------
+const editProfileBtn = document.getElementById('editProfileBtn');
+const editProfileOverlay = document.getElementById('editProfileOverlay');
+const closeEditProfile = document.getElementById('closeEditProfile');
+const saveEditProfile = document.getElementById('saveEditProfile');
+const editName = document.getElementById('editName');
+const editBioEl = document.getElementById('editBio');
+const editLocation = document.getElementById('editLocation');
+const editWebsite = document.getElementById('editWebsite');
+
+if (editProfileBtn && editProfileOverlay) {
+  editProfileBtn.addEventListener('click', () => {
+    if (editName) editName.value = currentUser.name;
+    if (editBioEl) editBioEl.value = currentUser.bio;
+    if (editLocation) editLocation.value = currentUser.location;
+    if (editWebsite) editWebsite.value = currentUser.website;
+    editProfileOverlay.classList.remove('hidden');
+  });
+}
+
+if (closeEditProfile && editProfileOverlay) {
+  closeEditProfile.addEventListener('click', () => editProfileOverlay.classList.add('hidden'));
+}
+if (editProfileOverlay) {
+  editProfileOverlay.addEventListener('click', (e) => {
+    if (e.target === editProfileOverlay) editProfileOverlay.classList.add('hidden');
+  });
+}
+
+if (saveEditProfile) {
+  saveEditProfile.addEventListener('click', () => {
+    if (editName && editName.value) currentUser.name = editName.value;
+    if (editBioEl) currentUser.bio = editBioEl.value;
+    if (editLocation) currentUser.location = editLocation.value;
+    if (editWebsite) currentUser.website = editWebsite.value;
+    updateProfileUI();
+    saveToStorage();
+    editProfileOverlay.classList.add('hidden');
+  });
 }
 
 // ---------- ICONS ----------
@@ -121,7 +218,9 @@ const ICONS = {
   retweet: `<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M17 1l4 4-4 4M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 01-4 4H3"/></svg>`,
   like: `<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M12 21s-7.5-4.9-10-9.5C.5 7.8 2.6 4 6.3 4c2 0 3.6 1.1 4.5 2.5C11.7 5.1 13.3 4 15.3 4 19 4 21.1 7.8 20.6 11.5 18.1 16.1 12 21 12 21z"/></svg>`,
   likeFilled: `<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 21s-7.5-4.9-10-9.5C.5 7.8 2.6 4 6.3 4c2 0 3.6 1.1 4.5 2.5C11.7 5.1 13.3 4 15.3 4 19 4 21.1 7.8 20.6 11.5 18.1 16.1 12 21 12 21z"/></svg>`,
-  share: `<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M12 16V4M7 8l5-5 5 5M5 14v5a1 1 0 001 1h12a1 1 0 001-1v-5"/></svg>`
+  share: `<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M12 16V4M7 8l5-5 5 5M5 14v5a1 1 0 001 1h12a1 1 0 001-1v-5"/></svg>`,
+  bookmark: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>`,
+  bookmarkFilled: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>`
 };
 
 function escapeHtml(str){
@@ -154,14 +253,31 @@ function tweetTemplate(t){
         <button class="retweet-btn ${retweeted ? 'retweeted':''}">${ICONS.retweet}<span>${fmt(t.retweets + (retweeted?1:0))}</span></button>
         <button class="like-btn ${liked ? 'liked':''}">${liked ? ICONS.likeFilled : ICONS.like}<span>${fmt(t.likes + (liked?1:0))}</span></button>
         <button class="share-btn">${ICONS.share}</button>
+        <button class="bookmark-btn">${bookmarked.has(t.id) ? ICONS.bookmarkFilled : ICONS.bookmark}</button>
+        ${t.handle === currentUser.handle ? `<button class="delete-btn" title="Delete post">🗑️</button>` : ''}
       </div>
     </div>
   </article>`;
 }
 
+let homeTab = 'foryou';
+
 function renderFeed(){
   const feed = document.getElementById('feed');
-  feed.innerHTML = tweets.map(tweetTemplate).join('');
+  let toRender = tweets;
+  if (homeTab === 'following') {
+    toRender = tweets.filter(t => followed.has(t.handle) || t.handle === currentUser.handle);
+  }
+  feed.innerHTML = toRender.map(tweetTemplate).join('');
+}
+
+function renderBookmarks(){
+  const container = document.getElementById('bookmarksFeed');
+  if (!container) return;
+  const filtered = tweets.filter(t => bookmarked.has(t.id));
+  container.innerHTML = filtered.length 
+    ? filtered.map(tweetTemplate).join('') 
+    : '<div style="padding:40px 20px; color:var(--text-dim); text-align:center;">No bookmarks yet.<br>Tap the bookmark icon on tweets to save them here.</div>';
 }
 
 // ---------- TWEET INTERACTIONS ----------
@@ -202,6 +318,26 @@ document.getElementById('feed').addEventListener('click', (e) => {
     }, 50);
   } else if(e.target.closest('.share-btn')){
     showToast("Link copied ✦");
+  } else if(e.target.closest('.bookmark-btn')){
+    const bmId = id;
+    if (bookmarked.has(bmId)) {
+      bookmarked.delete(bmId);
+    } else {
+      bookmarked.add(bmId);
+      showToast("Added to Bookmarks");
+    }
+    article.outerHTML = tweetTemplate(tweet);
+    saveToStorage();
+  } else if(e.target.closest('.delete-btn')){
+    if (confirm('Delete this post?')) {
+      const idx = tweets.findIndex(tt => tt.id === id);
+      if (idx > -1) {
+        tweets.splice(idx, 1);
+        renderFeed();
+        if (homeTab === 'following') renderFeed(); // in case
+        saveToStorage();
+      }
+    }
   }
 });
 
@@ -241,6 +377,10 @@ function setView(name){
   document.querySelectorAll('.nav-item[data-view], .mobile-nav a[data-view]').forEach(el => {
     el.classList.toggle('active', el.dataset.view === name);
   });
+
+  if (name === 'bookmarks') {
+    renderBookmarks();
+  }
 }
 
 // Wire nav links that exist in HTML (data-view)
@@ -390,13 +530,13 @@ function postNewTweet(text, source = 'inline'){
 
   tweets.unshift({
     id: 'u' + Date.now(),
-    name: "Samukelo Ricardo Ngozo",
-    handle: "@samukelo",
+    name: currentUser.name,
+    handle: currentUser.handle,
     time: "now",
     text,
     likes: 0, retweets: 0, replies: 0,
     img: attachedImg || null,
-    avatar: "https://i.pravatar.cc/48?img=28"
+    avatar: currentUser.avatar
   });
 
   renderFeed();
@@ -511,7 +651,7 @@ function renderRightSidebar(){
       `<div class="follow-item" data-idx="${i}">
         <img class="avatar" src="${p.img}" alt="">
         <div class="follow-meta"><strong>${p.name}</strong><span>${p.handle}</span></div>
-        <button class="follow-btn">Follow</button>
+        <button class="follow-btn ${followed.has(p.handle) ? 'following' : ''}">${followed.has(p.handle) ? 'Following' : 'Follow'}</button>
       </div>`
     ).join('');
   }
@@ -522,8 +662,20 @@ if (followListEl) {
   followListEl.addEventListener('click', (e) => {
     const btn = e.target.closest('.follow-btn');
     if (!btn) return;
-    const following = btn.classList.toggle('following');
-    btn.textContent = following ? 'Following' : 'Follow';
+    const item = btn.closest('.follow-item');
+    const handle = item ? peopleToFollow[parseInt(item.dataset.idx)].handle : null;
+    if (!handle) return;
+    if (followed.has(handle)) {
+      followed.delete(handle);
+      btn.classList.remove('following');
+      btn.textContent = 'Follow';
+    } else {
+      followed.add(handle);
+      btn.classList.add('following');
+      btn.textContent = 'Following';
+    }
+    saveToStorage();
+    if (homeTab === 'following') renderFeed();
   });
 }
 
@@ -617,9 +769,26 @@ function initExplore() {
   renderExploreResults('all', '');
 }
 
+// Home tabs (For you / Following)
+document.querySelectorAll('.home-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.home-tab').forEach(t => {
+      t.classList.remove('active');
+      t.style.color = 'var(--text-dim)';
+      t.style.borderBottom = 'none';
+    });
+    tab.classList.add('active');
+    tab.style.color = 'var(--text)';
+    tab.style.borderBottom = '2px solid var(--accent)';
+    homeTab = tab.dataset.tab;
+    renderFeed();
+  });
+});
+
 // ---------- INIT (safe) ----------
 function initApp() {
   loadFromStorage();
+  updateProfileUI();
   renderFeed();
   renderRightSidebar();
   initExplore();
@@ -627,6 +796,13 @@ function initApp() {
   // Show home by default
   const homeView = document.getElementById('view-home');
   if (homeView) homeView.classList.remove('hidden');
+
+  // Seed some follows for demo (Following tab)
+  if (followed.size === 0) {
+    followed.add('@zaio_io');
+    followed.add('@naledi_dev');
+  }
+  renderRightSidebar(); // refresh follows
 }
 
 initApp();

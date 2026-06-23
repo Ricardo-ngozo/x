@@ -679,6 +679,56 @@ textarea:focus-visible {
   background: #3a3f44;
 }
 
+/* Home tabs polish */
+.home-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+.home-tab {
+  flex: 1;
+  padding: 14px;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+}
+
+.home-tab.active {
+  color: var(--text);
+  border-bottom: 2px solid var(--accent);
+}
+
+.home-tab:hover {
+  background: var(--card);
+}
+
+/* Better composer polish for Twitter feel */
+.composer {
+  padding: 12px 16px;
+}
+
+.composer textarea {
+  font-size: 1.3rem;
+}
+
+.modal textarea {
+  font-size: 1.2rem;
+}
+
+/* Delete button style */
+.delete-btn {
+  color: #f91880;
+  opacity: 0.7;
+}
+.delete-btn:hover {
+  opacity: 1;
+  background: rgba(249, 24, 128, 0.1);
+}
+
 /* ==================== VIEW SWITCHING (required for data-view nav) ==================== */
 .view {
   display: block;
