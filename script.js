@@ -261,7 +261,34 @@ if (inlineText && inlinePostBtn) {
   inlinePostBtn.addEventListener('click', () => postNewTweet(inlineText.value, 'inline'));
 }
 
-// ---------- MEDIA ATTACHMENTS (AI Feature 1) ----------
+// ---------- MEDIA ATTACHMENTS (AI Feature 1 - implemented with Cursor) ----------
+
+/*
+  MANUAL FEATURE HOOK (15 marks - YOU implement this, no AI code)
+  ----------------------------------------------------------------
+  Recommended: Interactive Polls
+  - When user clicks #inlinePollBtn or #modalPollBtn, open a simple poll builder UI
+    (you can create a small modal or inline form with 2-4 options).
+  - On post, attach a `poll: { question, options: [{text, votes: 0}, ...] }` to the tweet.
+  - In tweetTemplate / feed, if tweet has poll, render nice bars that are clickable.
+  - Track votes per poll (session or extend storage).
+  - Style the poll nicely to match the rest of the UI.
+  Place your code in a clearly marked section. Show the commits + logic in Loom.
+  The buttons below are wired to console.log for now — replace with your logic.
+*/
+
+const inlinePollBtn = document.getElementById('inlinePollBtn');
+const modalPollBtn = document.getElementById('modalPollBtn');
+
+function stubPoll() {
+  // STUDENT: replace this entire function + handlers with real poll creation UI + render logic
+  alert('This is a stub for your manual feature.\n\nImplement "Add poll" here (question + options, post with poll data, interactive votes in feed).');
+  // Example future shape when posting:
+  // tweet.poll = { question: "Best JS framework?", options: [{text:"React", votes:12}, ...] }
+}
+
+if (inlinePollBtn) inlinePollBtn.addEventListener('click', stubPoll);
+if (modalPollBtn) modalPollBtn.addEventListener('click', stubPoll);
 // Supports single image per post for simplicity (easy to extend to array)
 // Preview + remove for both inline and modal. Uses dataURL for demo (no server).
 
