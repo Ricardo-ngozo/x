@@ -377,35 +377,43 @@ textarea {
   object-fit: cover;
   border: 4px solid var(--bg);
   background: var(--card);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
 .profile-header {
   position: relative;
-  margin-bottom: 70px;
+  margin-bottom: 84px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
 }
 
 .profile-banner {
   width: 100%;
-  height: 200px;
+  height: 220px;
   object-fit: cover;
   display: block;
+  object-position: center;
 }
 
 .profile-avatar-container {
   position: absolute;
   bottom: -60px;
   left: 20px;
+  z-index: 2;
 }
 
 /* Basic profile info polish */
 .profile-info {
-  padding: 0 20px;
+  padding: 0 20px 24px;
 }
 
 .profile-header-info {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+  padding-top: 8px;
 }
 
 .edit-profile-btn {
@@ -466,6 +474,18 @@ textarea {
   gap: 12px;
   flex-wrap: wrap;
   margin-bottom: 12px;
+}
+
+.profile-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.profile-meta img {
+  width: 16px;
+  height: 16px;
+  opacity: 0.8;
 }
 
 .profile-stats {
